@@ -1,14 +1,13 @@
 # MAPPO
 Multi-Agent Proximal Policy Optimization
 
-'''
+```bash
 python3 main.py
-'''
+```
+For testing the environment
 
-For testing the envirinoment
+```bash
+python3 env.py
+```
 
-'''
-python env.py
-'''
-
-![Environment 128x128](env.png)
+<img src="env.png" width="300" height="200" alt="Environment 128x128">
