@@ -10,4 +10,4 @@ For testing the environment
 python3 env.py
 ```
 
-<img src="env.png" width="300" height="200" alt="Environment 128x128">
+<img src="env.png" width="500" height="500" alt="Environment 128x128">
