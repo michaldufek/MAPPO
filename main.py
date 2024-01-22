@@ -25,8 +25,8 @@ if __name__ == '__main__':
                            alpha=0.01, beta=0.01, 
                            chkpt_dir='tmp/maddpg/')
 
-    memory = MultiAgentReplayBuffer(512, actor_dims, 
-                        n_actions, n_agents, batch_size=128)
+    memory = MultiAgentReplayBuffer(2048, actor_dims, 
+                        n_actions, n_agents, batch_size=512)
 
     PRINT_INTERVAL = 500
     N_GAMES = 50000
@@ -94,7 +94,8 @@ if __name__ == '__main__':
                     best_score = avg_score
                 
                 print("learning ...")
-                mappo_agents.learn(memory, clip_param=0.1, ppo_epochs=8, mini_batch_size=128)
+                mappo_agents.learn(memory, clip_param=0.2, ppo_epochs=8, mini_batch_size=128)
+                env.reset()
 
                 #print(f"episode {i}, average score {score}")
 

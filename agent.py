@@ -7,11 +7,12 @@ from networks import ActorNetwork, CriticNetwork
 from tqdm import tqdm
 
 class Agent:
-    def __init__(self, actor_dims, n_actions, agent_idx, chkpt_dir, alpha=0.01, beta=0.01, gamma=0.95):
+    def __init__(self, actor_dims, n_actions, agent_idx, chkpt_dir, alpha=0.01, beta=0.01, gamma=0.95, entropy_c=1e-3):
         self.gamma = gamma
         self.n_actions = n_actions
         self.agent_idx = agent_idx
         self.agent_name = f'agent_{agent_idx}'
+        self.entropy_coefficient = entropy_c
 
         self.actor = ActorNetwork(alpha, actor_dims, 64, 64, n_actions, self.agent_name + '_actor', chkpt_dir=chkpt_dir)
         self.critic = CriticNetwork(beta, 64, 64, name=self.agent_name+'_critic', chkpt_dir=chkpt_dir)
@@ -121,7 +122,9 @@ class Agent:
             ratios = T.exp(new_log_probs - mini_batch_old_log_probs)
             surr1 = ratios * mini_batch_advantages
             surr2 = T.clamp(ratios, 1.0 - clip_param, 1.0 + clip_param) * mini_batch_advantages
+            entropy = dist.entropy()
             actor_loss = -T.min(surr1, surr2).mean()
+            actor_loss -= self.entropy_coefficient * entropy.mean()
 
             # Calculate value loss
             critic_loss = F.mse_loss(mini_batch_returns, state_values)

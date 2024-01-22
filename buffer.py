@@ -78,6 +78,8 @@ class MultiAgentReplayBuffer:
 
         # Batch standardization of rewards
         rewards = self.standardize_rewards(rewards=rewards)
+        print(rewards)
+
         return actor_states, states, actions, log_probs, rewards, actor_new_states, states_, terminal
 
     def ready(self):

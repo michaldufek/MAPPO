@@ -16,7 +16,7 @@ class CriticNetwork(nn.Module):
 
         # Convolutional layers using Sequential
         self.conv_layers = nn.Sequential(
-            nn.Conv2d(in_channels=5, out_channels=32, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(in_channels=2, out_channels=32, kernel_size=3, stride=1, padding=1), # input channel is number of "pictures"
             nn.ReLU(),
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1),
             nn.ReLU()
@@ -47,7 +47,7 @@ class CriticNetwork(nn.Module):
 
     def _calculate_conv_output_dims(self):
         # Example input for one sample: (5 agent/channels, 128 height, 128 width)
-        temp_input = T.zeros(1, 5, 128, 128).to(self.device)
+        temp_input = T.zeros(1, 2, 32, 32).to(self.device)
 
         # Pass the temporary input through convolution layers
         conv_out = self.conv_layers(temp_input)

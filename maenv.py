@@ -1,11 +1,13 @@
-#from pettingzoo import ParallelEnv
+from pettingzoo import AECEnv
+from pettingzoo.utils import wrappers
+
 import gymnasium as gym
 from gymnasium.spaces import Discrete, Box
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
-class VacuumCleanerEnv(gym.Env):
+class VacuumCleanerEnv(AECEnv):
     """
     Environment Representation:
     ---------------------------
@@ -36,12 +38,6 @@ class VacuumCleanerEnv(gym.Env):
         self.num_obstacles = 6
         self.dirt_size = 3
         self.num_dirt = 25
-
-    def observation_space(self, agent):
-        return self.observation_spaces[agent]
-    
-    def action_space(self, agent):
-        return self.action_spaces[agent]
 
     def _check_space_is_free(self, x, y, n):
         # Check if an NxN area is free of obstacles for agent initialization
@@ -118,7 +114,7 @@ class VacuumCleanerEnv(gym.Env):
         # Initialize dirt
         self._initialize_dirt(dirt_size=self.dirt_size, num_dirt=self.num_dirt)
 
-        return self._observe(), {}
+        return self.observe(), {}
 
     def _get_new_position(self, x, y, action, n):
         # Adjust bounds to prevent the NxN agent from going out of bounds
@@ -171,7 +167,7 @@ class VacuumCleanerEnv(gym.Env):
 
             self._clean_area_around(new_x, new_y, self.agent_size)
 
-        observations = self._observe()
+        observations = self.observe()
         dones = {agent: self.cycle_count >= self.max_cycles for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
 
@@ -184,7 +180,7 @@ class VacuumCleanerEnv(gym.Env):
                     return False  # Invalid position if out of bounds or on an obstacle
         return True
 
-    def _observe(self):
+    def observe(self):
         observations = {}
         for agent_id in self.agents:
             # Create an observation that includes the grid and the agent's position
